@@ -2,7 +2,8 @@ import { Project } from "./project";
 
 class App {
     constructor() {
-        this.projects = [];
+        // this.projects = projects;
+        this.createProject = this.createProject.bind(this);
     };
 
     // Search for the index of a Project or a Task
@@ -17,22 +18,29 @@ class App {
         arr.splice(index, 1)
     };
 
+
     // Project related actions
 
     // Creating a new Project
-    createProject() {
+    createProject(p) {
             const projectName = document.querySelector('#project-name').value;
             const projectDesc = document.querySelector('#project-description').value;
             let project = new Project(projectName, projectDesc);
-            this.projects.push(project)
-            // TODO re-render the projects
+            console.log(project)
+            p.push(project)
+            localStorage.setItem('projects', JSON.stringify(p));
+            this.showProjects(p)
+
+            // Clearing Modal fields
+            document.querySelector('#project-name').value = '';
+            document.querySelector('#project-description').value = '';
     }
 
     // Rendering the projects
-    showProjects() {
+    showProjects(p) {
         let targetNode = document.querySelector('#projects');
     
-        let renderProjects = this.projects.map(function(project, index) {
+        let renderProjects = p.map(function(project, index) {
                 return `
                     <li data-id="${project.id}">
                         <p>${project.name}</p>
@@ -42,6 +50,7 @@ class App {
     
         targetNode.innerHTML = renderProjects;
     };
+
 
 }
 
