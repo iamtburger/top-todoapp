@@ -16,6 +16,9 @@ p {
     line-height: 1.7em;
     color: #999;
 }
+li {
+    cursor: pointer;
+}
 
 /* a, a:hover, a:focus {
     color: inherit;

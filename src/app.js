@@ -8,7 +8,7 @@ class App {
 
     // Search for the index of a Project or a Task
     searchElement(arr, id) {
-        let index = arr.map(e => e.id).indexOf(id)
+        let index = arr.map(e => e.id).indexOf(id);
         return index;
     };
 
@@ -26,7 +26,7 @@ class App {
             const projectName = document.querySelector('#project-name').value;
             const projectDesc = document.querySelector('#project-description').value;
             let project = new Project(projectName, projectDesc);
-            console.log(project)
+            // console.log(project)
             p.push(project)
             localStorage.setItem('projects', JSON.stringify(p));
             this.showProjects(p)
@@ -42,16 +42,32 @@ class App {
     
         let renderProjects = p.map(function(project, index) {
                 return `
-                    <li data-id="${project.id}">
+                    <li data-id="${project.id}" class="project-name">
                         <p>${project.name}</p>
                     </li>
                 `
             }).join('');
     
         targetNode.innerHTML = renderProjects;
+        document.querySelectorAll('.project-name').forEach(select => select.addEventListener('click', ()=>this.showTasks(p, select.dataset.id)))
     };
 
+    // this.showTasks(p, select.dataset.id)
+    showTasks(p, id) {
+        let idNum = parseInt(id)
+        let index = this.searchElement(p, idNum)
+        let targetNode = document.querySelector('#tasks');
 
+        let renderTasks = p[index]['tasks'].map(function(task, index) {
+            return `
+                <div data-id="${task.id}" class"task">
+                    <p>${task.name}</p>
+                </div>
+            ` 
+        }).join('');
+
+        targetNode.innerHTML = renderTasks;
+    }
 }
 
 

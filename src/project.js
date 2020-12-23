@@ -4,7 +4,7 @@ class Project {
         this.description = description || '';
         this.tasks = [];
         // This is a temporary id generator -> TODO implement a valid ID generator
-        this.id = Math.random() * 10000;
+        this.id = 1000
     };
 
     // addTask(task) {
