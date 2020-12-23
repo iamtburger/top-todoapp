@@ -1,4 +1,5 @@
 import { Project } from "./project";
+import { Task } from "./task";
 
 class App {
     constructor() {
@@ -54,8 +55,7 @@ class App {
 
     // this.showTasks(p, select.dataset.id)
     showTasks(p, id) {
-        let idNum = parseInt(id)
-        let index = this.searchElement(p, idNum)
+        let index = this.searchElement(p, id)
         let targetNode = document.querySelector('#tasks');
 
         let renderTasks = p[index]['tasks'].map(function(task, index) {
@@ -66,8 +66,34 @@ class App {
             ` 
         }).join('');
 
-        targetNode.innerHTML = renderTasks;
-    }
+        let addTaskButton = `
+            <div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#taskModal">
+                    Add New Task
+                </button>
+            </div>
+        `
+
+        targetNode.innerHTML = renderTasks + addTaskButton;
+        document.querySelector('#create-task').addEventListener('click', ()=> {
+            const taskName = document.querySelector('#task-name').value;
+            const taskDesc = document.querySelector('#task-description').value;
+            let task = new Task(taskName, taskDesc);
+
+            p[index]['tasks'].push(task);
+            localStorage.setItem('projects', JSON.stringify(p));
+
+            // Clearing Modal fields
+            document.querySelector('#task-name').value = '';
+            document.querySelector('#task-description').value = '';
+
+            this.showTasks(p, id)
+        })
+
+        // console.log(p)
+    
+    };
+
 }
 
 

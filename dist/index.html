@@ -28,6 +28,26 @@
         </div>
     </div>
 
+    <!-- Task Modal -->
+    <div class="modal fade" id="taskModal" tabindex="-1" aria-labelledby="taskModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="taskModalLabel">New Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" placeholder="Task Title" id="task-name">
+                    <input type="text" placeholder="Description" id="task-description">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="create-task" data-bs-dismiss="modal">Add Task</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="wrapper">
         <!-- Sidebar -->
         <nav id="sidebar">
