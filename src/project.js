@@ -7,16 +7,9 @@ class Project {
         this.tasks = [];
         // This is a temporary id generator -> TODO implement a valid ID generator
         this.id = nanoid()
+        this.selected = false;
     };
 
-    // addTask(task) {
-    //     this.tasks.push(task);
-    // };
-
-    // removeTask(id) {
-    //     let index = tasks.map(e => e.id).indexOf(id)
-    //     this.tasks.splice(index, 1)
-    // }
 }
 
 export { Project }

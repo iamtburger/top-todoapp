@@ -16,9 +16,15 @@
                 <h5 class="modal-title" id="exampleModalLabel">New Project</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <input type="text" placeholder="Project name" id="project-name">
-                    <input type="text" placeholder="Description" id="project-description">
+                <div class="modal-body input-group">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Project name</span>
+                        <input type="text" class="form-control" aria-label="Task name" aria-describedby="basic-addon1" id="project-name">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text">Description</span>
+                        <textarea class="form-control" aria-label="Description" id="project-description"></textarea>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -36,9 +42,21 @@
                 <h5 class="modal-title" id="taskModalLabel">New Task</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <input type="text" placeholder="Task Title" id="task-name">
-                    <input type="text" placeholder="Description" id="task-description">
+                <div class="modal-body input-group">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Task name</span>
+                        <input type="text" class="form-control" aria-label="Task name" aria-describedby="basic-addon1" id="task-name">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-text">Description</span>
+                        <textarea class="form-control" aria-label="Description" id="task-description"></textarea>
+                    </div>
+                    <input class="form-control" type="date" name="" id="calendar">
+                    <select class="form-select" aria-label="Priority" id="task-priority">
+                        <option value="1">High priority</option>
+                        <option value="2">Medium priority</option>
+                        <option value="3">Low priority</option>
+                      </select>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -66,7 +84,10 @@
         </nav>
         <!-- Page Content -->
         <div id="content">
-            <div id="tasks">
+            <div class="row" id="tasks">
+
+            </div>
+            <div id="modal-target">
 
             </div>
         </div>

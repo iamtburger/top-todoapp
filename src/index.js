@@ -9,7 +9,6 @@ let app = new App();
 // Check if the user has already something on the local drive
 if (localStorage.getItem('projects')) {
     projects = JSON.parse(localStorage.getItem('projects'));
-    // console.log(projects[0]["id"])
 } 
 else {
     // If not, initialize a Default Project with a Default Task
@@ -18,9 +17,9 @@ else {
     let defaultTask = new Task('Default Task', 'Description for Default Task', '2021', 1);
     projects[0]['tasks'].push(defaultTask)
     localStorage.setItem('projects', JSON.stringify(projects));
-    // console.log('new' + projects)
 };
 
 app.showProjects(projects)
 // Using ()=> in eventListener allows you to add arguments to the function without firing on page load!
 document.querySelector('#create-project').addEventListener('click', ()=> app.createProject(projects))
+console.log(projects)
