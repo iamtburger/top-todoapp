@@ -101,7 +101,7 @@ class App {
             // TODO: add remaining days to each task card
             return `
             <div class="col-sm-3">
-                <div class="${priorityColor}" data-id="${task.id}" style="max-width: 20rem;">
+                <div class="${priorityColor}" data-id="${task.id}" style="max-width: 20rem;" data-bs-toggle="modal" data-bs-target="#taskModal">
                     <div class="card-body">
                         <h5 class="card-title">${task.name}</h5>
                         <p class="card-text">${shownDescription}</p>
@@ -121,54 +121,57 @@ class App {
             </div>
         `
 
+        let testButton = `
+            <div>
+                <button type="button" class="btn btn-primary m-4" data-bs-toggle="modal" data-bs-target="#taskModal">
+                TEsting modal
+                </button>
+            </div>
+        `
+
         targetNode.innerHTML = renderTasks + addTaskButton;
+
+        // document.querySelectorAll('.card').forEach(selected => selected.onclick = () => this.editTask(projects, selected.dataset.id))
+        // prevent eventlistener from stacking up! -> Search solution without onclick.
+        document.querySelector('#taskModal').addEventListener('show.bs.modal', (selected) => {
+            let card = selected.relatedTarget;
+            let taskId = card.getAttribute('data-id');
+            this.editTask(projects, taskId)
+            // selected.stopImmediatePropagation()
+
+        });
 
         // Preventing the event from firing multiple times - as they were stacked due to showTasks and createTasks being called by each other - instead of addEventListener it was necessary to use .onclick eventHandler.
         document.querySelector('#create-task').onclick = () => this.createTask(projects);
     
     };
 
-    editTask(selectedProject, taskId) {
+    editTask(projects, taskId) {
+        console.log('1')
+
+        document.querySelector('#create-task').removeAttribute('onclick')
         
-        console.log(selectedProject)
-        console.log(taskId)
+        let selectedProject = projects.filter(project => project.selected === true)[0];
+        let taskIndex = this.searchElement(selectedProject.tasks, taskId);
+        let selectedTask = selectedProject['tasks'][taskIndex]
 
-        let modalContent = `
-        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                <h5 class="modal-title" id="editModalLabel">Edit Task</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body input-group">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">Task name</span>
-                        <input type="text" class="form-control" aria-label="Task name" aria-describedby="basic-addon1" id="task-name">
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-text">Description</span>
-                        <textarea class="form-control" aria-label="Description" id="task-description"></textarea>
-                    </div>
-                    <input class="form-control" type="date" name="" id="calendar">
-                    <select class="form-select" aria-label="Priority" id="task-priority">
-                        <option value="1">High priority</option>
-                        <option value="2">Medium priority</option>
-                        <option value="3">Low priority</option>
-                      </select>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="create-task" data-bs-dismiss="modal">Add Task</button>
-                </div>
-            </div>
-        </div>
-        </div>
-        `
-        document.querySelector('#modal-target').innerHTML = modalContent;
-        document.querySelector('#task-name').value = selectedProject.name;
-        document.querySelector('#task-description').value = selectedProject.description;
+        document.querySelector('#task-name').value = selectedTask.name;
+        document.querySelector('#task-description').value = selectedTask.description;
+        document.querySelector('#calendar').value = selectedTask.deadline;
+        document.querySelector('#task-priority').value = selectedTask.priority;
+        document.querySelector('#create-task').textContent = "Save Changes";
+        document.querySelector('#taskModalLabel').textContent = selectedTask.name;
 
+        document.querySelector('#create-task').onclick = () => {
+            selectedTask.name = document.querySelector('#task-name').value;
+            selectedTask.description = document.querySelector('#task-description').value;
+            selectedTask.deadline = document.querySelector('#calendar').value;
+            selectedTask.priority = document.querySelector('#task-priority').value;
+
+            localStorage.setItem('projects', JSON.stringify(projects));
+
+            this.showTasks(projects, selectedProject.id);
+        };
     };
 
     removeTask() {
