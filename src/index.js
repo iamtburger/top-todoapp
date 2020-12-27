@@ -22,4 +22,10 @@ else {
 app.showProjects(projects)
 // Using ()=> in eventListener allows you to add arguments to the function without firing on page load!
 document.querySelector('#create-project').addEventListener('click', ()=> app.createProject(projects))
-console.log(projects)
+document.querySelector('#taskModal').addEventListener('hidden.bs.modal', () => {
+    document.querySelector('#task-name').value = '';
+    document.querySelector('#task-description').value = '';
+    document.querySelector('#calendar').value = '';
+    document.querySelector('#task-priority').value = '';
+    document.querySelector('#taskModalLabel').textContent = 'New Task';
+});

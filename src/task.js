@@ -15,7 +15,8 @@ class Task {
         }
 
         this.priority = priority || "medium";
-        this.id = nanoid()
+        this.id = nanoid();
+        this.done = false;
     }
 
 };

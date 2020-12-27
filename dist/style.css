@@ -16,6 +16,13 @@ p {
 li {
     cursor: pointer;
 }
+.description {
+    height: 60px;
+}
+
+.strikethrough {
+    text-decoration: line-through;
+}
 
 /* a, a:hover, a:focus {
     color: inherit;

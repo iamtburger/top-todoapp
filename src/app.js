@@ -72,7 +72,7 @@ class App {
         projects[index]['selected'] = true;
         let targetNode = document.querySelector('#tasks');
 
-        let renderTasks = projects[index]['tasks'].map(function(task, index) {
+        let renderTasks = projects[index]['tasks'].map(function(task, taskIndex) {
             
             // Rendering priorities with color-codes
             let renderedPrio;
@@ -85,7 +85,7 @@ class App {
                 priorityColor = "card text-dark bg-warning mb-3";
             } else if (task.priority === "3") {
                 renderedPrio = "Low priority"
-                priorityColor = "card text-dark bg-light mb-3";
+                priorityColor = "card text-white bg-secondary mb-3";
             }
 
             // Shortening shown description
@@ -95,18 +95,37 @@ class App {
                 console.log(task.description.length)
             } else {
                 shownDescription = task.description;
+            };
+
+            let status = task.done;
+            if (task.done) {
+                console.log('Ez színes lesz')
+            } else {
+                console.log('Ez szürke lesz')
             }
-            
 
             // TODO: add remaining days to each task card
             return `
             <div class="col-sm-3">
-                <div class="${priorityColor}" data-id="${task.id}" style="max-width: 20rem;" data-bs-toggle="modal" data-bs-target="#taskModal">
-                    <div class="card-body">
-                        <h5 class="card-title">${task.name}</h5>
-                        <p class="card-text">${shownDescription}</p>
-                        <p class="card-text">${task.deadline}</p>
-                        <p class="card-text">${renderedPrio}</p>
+                <div class="${priorityColor}" style="max-width: 20rem;" >
+                    <div class="card-body" data-index="${taskIndex}">
+                        <div class="d-flex">
+                            <div class="p-2 w-100" data-id="${task.id}" data-bs-toggle="modal" data-bs-target="#taskModal">
+                                <h5 class="card-title">${task.name}</h5>
+                            </div>
+                            <div class="p-2 flex-shrink-1">
+                                <div class="form-check checkbox-state" data-index="${taskIndex}">
+                                    <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div data-id="${task.id}" data-bs-toggle="modal" data-bs-target="#taskModal">
+                            <p class="card-text description">${shownDescription}</p>
+                            <p class="card-text">${task.deadline}</p>
+                            <p class="card-text">${renderedPrio}</p>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -115,45 +134,51 @@ class App {
 
         let addTaskButton = `
             <div>
-                <button type="button" class="btn btn-primary m-4" data-bs-toggle="modal" data-bs-target="#taskModal">
+                <button type="button" class="btn btn-primary m-4" data-bs-toggle="modal" data-bs-target="#taskModal" data-id="new-task">
                     Add New Task
                 </button>
             </div>
         `
-
-        let testButton = `
-            <div>
-                <button type="button" class="btn btn-primary m-4" data-bs-toggle="modal" data-bs-target="#taskModal">
-                TEsting modal
-                </button>
-            </div>
-        `
-
         targetNode.innerHTML = renderTasks + addTaskButton;
 
-        // document.querySelectorAll('.card').forEach(selected => selected.onclick = () => this.editTask(projects, selected.dataset.id))
-        // prevent eventlistener from stacking up! -> Search solution without onclick.
         document.querySelector('#taskModal').addEventListener('show.bs.modal', (selected) => {
             let card = selected.relatedTarget;
             let taskId = card.getAttribute('data-id');
-            this.editTask(projects, taskId)
-            // selected.stopImmediatePropagation()
+            if (taskId === 'new-task') {
+                document.querySelector('#create-task').onclick = () => this.createTask(projects);
+                selected.stopImmediatePropagation()
+            } else {
+                this.editTask(projects, taskId)
+                // preventing the eventListener to stack up while changing projects
+                selected.stopImmediatePropagation()
+            }
 
         });
 
-        // Preventing the event from firing multiple times - as they were stacked due to showTasks and createTasks being called by each other - instead of addEventListener it was necessary to use .onclick eventHandler.
-        document.querySelector('#create-task').onclick = () => this.createTask(projects);
-    
+        document.querySelectorAll('.card-body').forEach((element, taskIndex)=> {
+            element.addEventListener('change', (target)=> {
+                console.log('váltás')
+                if (projects[index]['tasks'][taskIndex].done === false) {
+                    // let taskId = target.path[3].childNodes[1].getAttribute('data-id')
+                    element.parentElement.classList.remove('bg-danger', 'bg-warning', 'bg-light', 'text-dark', 'text-white');
+                    element.parentElement.classList.add('bg-success', 'text-white', 'strikethrough')
+                    projects[index]['tasks'][taskIndex].done = true;
+                } else {
+                    console.log('megint váltás')
+                }
+
+            })
+        })
     };
 
     editTask(projects, taskId) {
-        console.log('1')
 
         document.querySelector('#create-task').removeAttribute('onclick')
         
         let selectedProject = projects.filter(project => project.selected === true)[0];
         let taskIndex = this.searchElement(selectedProject.tasks, taskId);
         let selectedTask = selectedProject['tasks'][taskIndex]
+        console.log(selectedTask)
 
         document.querySelector('#task-name').value = selectedTask.name;
         document.querySelector('#task-description').value = selectedTask.description;
