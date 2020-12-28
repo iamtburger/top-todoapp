@@ -29,3 +29,15 @@ document.querySelector('#taskModal').addEventListener('hidden.bs.modal', () => {
     document.querySelector('#task-priority').value = '';
     document.querySelector('#taskModalLabel').textContent = 'New Task';
 });
+
+let toggle = document.querySelector('#sidebarCollapse');
+let sidebar = document.querySelector('#sidebar');
+
+toggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (sidebar.hasAttribute('hidden')) {
+        sidebar.removeAttribute('hidden');
+    } else {
+        sidebar.setAttribute('hidden', true);
+    }
+});
